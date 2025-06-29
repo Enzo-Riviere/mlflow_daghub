@@ -28,7 +28,7 @@ jobs:
         run: |
           mkdir -p models/rf_model
           mlflow artifacts download \
-            --run-id 52217afce9fe422fb7db7fff9028d857 \
+            --run-id 36e5746d4bd648eb916629143e70bbe1 \
             --artifact-path model/rf_model.pkl \
 
       - name: Setting up Docker Buildx
