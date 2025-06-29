@@ -30,7 +30,7 @@ jobs:
           mlflow artifacts download \
             --run-id 52217afce9fe422fb7db7fff9028d857 \
             --artifact-path model/rf_model.pkl \
-            --dst /
+            --dst-path /
 
 
       - name: Setting up Docker Buildx
