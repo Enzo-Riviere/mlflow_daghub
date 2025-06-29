@@ -1,0 +1,50 @@
+name: CI
+
+on:
+
+  push:
+    branches: [ "main" ]
+
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    env:
+        IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/rf-mlflow-notebook
+    steps:
+      
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup MLflow 
+        run: pip install mlflow==2.22.0
+
+      - name: Download model artifact from DagsHub
+        env:
+          MLFLOW_TRACKING_URI: https://dagshub.com/G1ul1o/Exercice_DVC.mlflow
+        run: |
+          mkdir -p models/rf_model
+          mlflow artifacts download \
+            --run-id 958d34d0f4e6487c9339e3f87e16308e \
+            --artifact-path model/rf_model.pkl \
+
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      - name: Build the image
+        run: |
+          docker build -t $IMAGE_NAME:application_mflow .
+
+      - name: Push images to Docker Hub
+        run: |
+          docker push $IMAGE_NAME:application_mflow
