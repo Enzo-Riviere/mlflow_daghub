@@ -30,6 +30,7 @@ jobs:
           mlflow artifacts download \
             --run-id 36e5746d4bd648eb916629143e70bbe1 \
             --artifact-path model/rf_model.pkl \
+            -d models/rf_model
 
       - name: Move model
         run: |
